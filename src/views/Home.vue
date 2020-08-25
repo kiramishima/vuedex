@@ -1,18 +1,32 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+  <div class="grid grid-cols-2 px-2" v-if="pokemonItems">
+    <PokeItem v-for="(item, index) of pokemonItems" v-bind:key="index" :Image="item.src" :Name="item.name" :Types="item.types" :Id="item.id" />
   </div>
 </template>
 
-<script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+<script lang="ts">
+import { Component, Prop, Vue } from "vue-property-decorator";
+import axios from "axios";
+import PokeItem from "@/components/PokeItem.vue";
+import { mapGetters } from 'vuex';
+import { IPokemon } from "@/models/IPokemon";
 
-export default {
+@Component({
   name: "Home",
-  components: {
-    HelloWorld
+  components: {PokeItem},
+  computed: mapGetters(["pokemonItems"])
+})
+export default class Home extends Vue {
+  created() {
+    this.$store.dispatch("getPokemonItems");
   }
-};
+
+  async mounted() {
+    // this.dataList = await this.getData();
+    // console.log((this as any).pokemonItems);
+    /*window.onscroll(e => {
+
+    })*/
+  }
+}
 </script>
